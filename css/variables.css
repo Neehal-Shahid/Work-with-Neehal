@@ -1,0 +1,82 @@
+:root {
+  /* Backgrounds */
+  --bg-primary: #F5F3EE;
+  --bg-secondary: #FFFFFF;
+  --bg-dark: #0E0E0C;
+  --bg-dark-card: #161614;
+
+  /* Typography */
+  --text-primary: #111110;
+  --text-secondary: #5C5C58;
+  --text-inverse: #F5F3EE;
+  --text-muted: #9C9C96;
+
+  /* Accents */
+  --accent-primary: #1A6B4A;
+  --accent-hover: #155A3D;
+  --accent-warm: #C4873A;
+  --accent-light: #E8F2EC;
+
+  /* Borders & Dividers */
+  --border-light: #E8E6E0;
+  --border-medium: #D4D1C8;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.10), 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 8px 40px rgba(26, 107, 74, 0.08);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.40);
+  --glass-blur: blur(20px) saturate(180%);
+
+  /* Fonts */
+  --font-heading: 'Satoshi', system-ui, sans-serif;
+  --font-body: 'Manrope', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+  --text-5xl: 4rem;
+  --text-6xl: 5.5rem;
+  --text-7xl: 7.5rem;
+
+  /* Line heights */
+  --leading-tight: 1.1;
+  --leading-snug: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+
+  /* Letter spacing */
+  --tracking-tight: -0.03em;
+  --tracking-normal: -0.01em;
+  --tracking-wide: 0.06em;
+
+  /* Breakpoints (reference) */
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1536px;
+
+  /* Gradients */
+  --grad-page-bg: linear-gradient(160deg, #F5F3EE 0%, #F0EFEA 40%, #F5F3EE 100%);
+  --grad-section-fade: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  --grad-card-overlay: linear-gradient(180deg, transparent 40%, rgba(14, 14, 12, 0.75) 100%);
+  --grad-dark-to-light: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-primary) 100%);
+  --grad-accent-text: linear-gradient(135deg, var(--accent-primary) 0%, #2A9D6F 100%);
+  --grad-glass-border: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 100%);
+
+  /* Spacing */
+  --section-pad: 120px;
+  --nav-height: 72px;
+}
