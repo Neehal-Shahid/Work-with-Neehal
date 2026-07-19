@@ -235,6 +235,10 @@
     const form = document.getElementById('contact-form');
     if (!form) return;
 
+    const statusEl = form.querySelector('#form-status');
+    const btn = form.querySelector('[type="submit"]');
+    const btnDefaultHtml = btn ? btn.innerHTML : '';
+
     const fields = {
       name: { required: true, message: 'Please enter your name.' },
       email: {
@@ -257,7 +261,7 @@
       });
     });
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
       let valid = true;
       Object.keys(fields).forEach((id) => {
@@ -266,19 +270,78 @@
       });
       if (!valid) return;
 
-      const btn = form.querySelector('[type="submit"]');
-      if (btn) {
-        btn.textContent = 'Sent — I\'ll reply soon';
-        btn.disabled = true;
+      const accessKey = form.querySelector('[name="access_key"]')?.value?.trim();
+      if (!accessKey || accessKey === 'YOUR_WEB3FORMS_ACCESS_KEY') {
+        setFormStatus(
+          statusEl,
+          'error',
+          'Form is not connected yet. Add your Web3Forms access key in contact.html.'
+        );
+        return;
       }
-      form.reset();
-      setTimeout(() => {
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Sending…';
+      }
+      setFormStatus(statusEl, '', '');
+
+      try {
+        const formData = new FormData(form);
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: formData,
+        });
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || 'Something went wrong. Please try again.');
+        }
+
+        form.reset();
+        Object.keys(fields).forEach((id) => {
+          const input = form.querySelector(`#${id}`);
+          input?.classList.remove('is-error');
+          input?.closest('.form-group')?.classList.remove('has-error');
+        });
+
         if (btn) {
-          btn.innerHTML = 'Send it <span class="btn-arrow">→</span>';
+          btn.textContent = "Sent — I'll reply soon";
+        }
+        setFormStatus(statusEl, 'success', "Got it. I'll reply within one business day.");
+
+        setTimeout(() => {
+          if (btn) {
+            btn.innerHTML = btnDefaultHtml;
+            btn.disabled = false;
+          }
+          setFormStatus(statusEl, '', '');
+        }, 5000);
+      } catch (err) {
+        if (btn) {
+          btn.innerHTML = btnDefaultHtml;
           btn.disabled = false;
         }
-      }, 3000);
+        setFormStatus(
+          statusEl,
+          'error',
+          err.message || 'Could not send. Email me at workwithneehal@gmail.com instead.'
+        );
+      }
     });
+  }
+
+  function setFormStatus(el, type, message) {
+    if (!el) return;
+    if (!message) {
+      el.hidden = true;
+      el.textContent = '';
+      el.className = 'form-status';
+      return;
+    }
+    el.hidden = false;
+    el.textContent = message;
+    el.className = `form-status form-status--${type}`;
   }
 
   function validateField(input, rules) {

@@ -60,6 +60,12 @@
       <div class="container">
         <div class="contact-grid">
           <form id="contact-form" novalidate data-animate="fade-up">
+            <!-- Get your free key at https://web3forms.com (use workwithneehal@gmail.com) -->
+            <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
+            <input type="hidden" name="subject" value="New inquiry from Work With Neehal" />
+            <input type="hidden" name="from_name" value="Work With Neehal Portfolio" />
+            <input type="checkbox" name="botcheck" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
             <div class="form-group">
               <label for="name">Name</label>
               <input type="text" id="name" name="name" autocomplete="name" required />
@@ -93,6 +99,7 @@
               <textarea id="message" name="message" placeholder="What does your business do? What's not working? What would success look like? You don't need to have all the answers — just start." required></textarea>
               <p class="form-error" role="alert"></p>
             </div>
+            <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
             <button type="submit" class="btn-primary magnetic">Send it <span class="btn-arrow">→</span></button>
           </form>
 
