@@ -126,14 +126,33 @@
   }
 
   .project-row {
+    --stack-gap: 24px;
+    top: calc(22vh + (var(--stack-i) * 10px)) !important;
+    margin-bottom: var(--stack-gap);
+  }
+
+  .project-row:last-child {
+    margin-bottom: 4px;
+  }
+
+  .project-row-inner {
     grid-template-columns: 1fr;
     min-height: auto;
+  }
+
+  .projects-stack {
+    padding-bottom: 0;
+  }
+
+  .projects-cta {
+    margin-top: 20px;
   }
 
   .project-row:nth-child(odd) .project-image,
   .project-row:nth-child(even) .project-image {
     order: 1;
     height: 220px;
+    min-height: 220px;
   }
 
   .project-row:nth-child(odd) .project-content,

@@ -25,6 +25,7 @@
     initHero();
     initFadeUps();
     initImageReveals();
+    initStickyProjects();
     initCounters();
     initFinalCtaWords();
   });
@@ -143,6 +144,9 @@
 
   function initImageReveals() {
     document.querySelectorAll('[data-animate="image"]').forEach((imgEl) => {
+      // Skip homepage portfolio images — parallax left a visible bottom gap
+      if (imgEl.closest('.projects-stack')) return;
+
       gsap.from(imgEl, {
         clipPath: 'inset(100% 0 0 0)',
         duration: 1.1,
@@ -159,6 +163,36 @@
           scrub: true,
         },
       });
+    });
+  }
+
+  function initStickyProjects() {
+    const cards = gsap.utils.toArray('.projects-stack .project-row');
+    if (cards.length < 2) return;
+
+    cards.forEach((card, i) => {
+      if (i === cards.length - 1) return;
+      const scaleEl = card.querySelector('.project-row-scale');
+      const next = cards[i + 1];
+      if (!scaleEl || !next) return;
+
+      // Buried-card depth: scale + dim + slight lift (physical pile feel)
+      gsap.fromTo(
+        scaleEl,
+        { scale: 1, y: 0, filter: 'brightness(1)' },
+        {
+          scale: 0.88,
+          y: -28,
+          filter: 'brightness(0.72)',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: next,
+            start: 'top bottom-=4%',
+            end: 'top top+=8%',
+            scrub: 0.45,
+          },
+        }
+      );
     });
   }
 

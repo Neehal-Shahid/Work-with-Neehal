@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>sister-v26 :: system</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="A small interactive experience.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ambient canvas layers -->
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<a class="skip-hint" id="skip-hint" href="#" role="button">skip →</a>
+
+<main id="app">
+
+  <!-- ============================================================
+       STAGE 0 — TERMINAL BOOT
+  ============================================================= -->
+  <section class="stage stage--terminal is-active" id="stage-terminal" aria-live="polite">
+    <div class="terminal-window">
+      <div class="terminal-titlebar">
+        <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+        <span class="terminal-titletext">sister.exe — booting</span>
+      </div>
+      <div class="terminal-body" id="terminal-body">
+        <div class="terminal-lines" id="terminal-lines"></div>
+        <div class="terminal-input-row" id="terminal-cta" hidden>
+          <button class="btn btn--terminal" id="btn-install">
+            <span class="btn-bracket">[</span> INSTALL UPDATE <span class="btn-bracket">]</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STAGE 1 — UPGRADE / RELEASE NOTES
+  ============================================================= -->
+  <section class="stage stage--upgrade" id="stage-upgrade" aria-live="polite">
+    <div class="terminal-window terminal-window--wide">
+      <div class="terminal-titlebar">
+        <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+        <span class="terminal-titletext">update-manager</span>
+      </div>
+      <div class="terminal-body">
+        <pre class="release-notes" id="release-notes"></pre>
+        <div class="progress-wrap" id="install-progress-wrap" hidden>
+          <div class="progress-label">
+            <span>Installing v26.0...</span>
+            <span id="progress-percent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="build-result" id="build-result" hidden>BUILD SUCCESSFUL <span class="check">✓</span></div>
+        </div>
+        <div class="terminal-input-row" id="upgrade-cta" hidden>
+          <button class="btn btn--terminal" id="btn-continue-git">
+            <span class="btn-bracket">[</span> CONTINUE <span class="btn-bracket">]</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STAGE 2 — GIT LOG
+  ============================================================= -->
+  <section class="stage stage--git" id="stage-git" aria-live="polite">
+    <div class="git-panel">
+      <div class="git-header">
+        <div class="git-repo-path">
+          <span class="git-icon">⌥</span> neehal / <span class="repo-highlight">sister-v26</span>
+        </div>
+        <div class="git-sub">git log --oneline --graph</div>
+      </div>
+
+      <ul class="git-log" id="git-log"></ul>
+
+      <p class="git-hint">tap a commit to view the diff</p>
+
+      <div class="terminal-input-row">
+        <button class="btn btn--terminal" id="btn-continue-debug" disabled>
+          <span class="btn-bracket">[</span> CONTINUE <span class="btn-bracket">]</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- commit detail modal -->
+    <div class="commit-modal" id="commit-modal" hidden>
+      <div class="commit-modal-backdrop" id="commit-modal-backdrop"></div>
+      <div class="commit-modal-card">
+        <button class="commit-modal-close" id="commit-modal-close" aria-label="Close">✕</button>
+        <div class="commit-modal-hash" id="commit-modal-hash"></div>
+        <div class="commit-modal-title" id="commit-modal-title"></div>
+        <div class="commit-modal-photo" id="commit-modal-photo" hidden></div>
+        <p class="commit-modal-memory" id="commit-modal-memory"></p>
+        <div class="commit-modal-label">[ MEMORY <span id="commit-modal-index"></span> ]</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STAGE 3 — DEBUG MINI-GAME
+  ============================================================= -->
+  <section class="stage stage--debug" id="stage-debug" aria-live="polite">
+    <div class="terminal-window terminal-window--wide">
+      <div class="terminal-titlebar">
+        <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+        <span class="terminal-titletext">birthday.config.js — 3 errors</span>
+      </div>
+      <div class="terminal-body">
+        <p class="debug-intro">Uh oh. Something's broken. Fix it before we continue.</p>
+
+        <pre class="code-block"><span class="code-kw">const</span> birthday = {
+  age: <span class="code-num" id="dbg-age-display">25</span>,
+  happiness: <span class="code-err" id="dbg-happy-display">???</span>,
+  cake: <span class="code-err" id="dbg-cake-display">false</span>
+};</pre>
+
+        <div class="debug-controls">
+
+          <div class="debug-control">
+            <label class="debug-control-label" for="dbg-age-btn">age</label>
+            <button class="debug-fix-btn" id="dbg-age-btn" type="button">
+              increment age <span class="debug-fix-btn-arrow">→</span>
+            </button>
+          </div>
+
+          <div class="debug-control">
+            <label class="debug-control-label" for="dbg-happy-slider">happiness</label>
+            <input type="range" min="0" max="100" value="0" id="dbg-happy-slider" class="debug-slider">
+          </div>
+
+          <div class="debug-control">
+            <label class="debug-control-label" for="dbg-cake-toggle">cake</label>
+            <button class="debug-toggle" id="dbg-cake-toggle" type="button" role="switch" aria-checked="false">
+              <span class="debug-toggle-knob"></span>
+            </button>
+          </div>
+
+        </div>
+
+        <div class="terminal-input-row">
+          <button class="btn btn--terminal" id="btn-compile" disabled>
+            <span class="btn-bracket">[</span> RUN SYSTEM CHECK <span class="btn-bracket">]</span>
+          </button>
+        </div>
+
+        <p class="debug-result" id="debug-result" hidden>
+          SYSTEM FIXED <span class="check">✓</span><br>
+          <span class="debug-result-sub">Looks like someone successfully debugged her birthday.</span>
+        </p>
+
+        <div class="terminal-input-row" id="debug-cta" hidden>
+          <button class="btn btn--terminal" id="btn-continue-emotional">
+            <span class="btn-bracket">[</span> CONTINUE <span class="btn-bracket">]</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STAGE 4 — EMOTIONAL TRANSITION
+  ============================================================= -->
+  <section class="stage stage--emotional" id="stage-emotional" aria-live="polite">
+    <div class="emotional-wrap">
+      <div class="emotional-pre" id="emotional-pre"></div>
+      <div class="emotional-message" id="emotional-message"></div>
+      <button class="btn btn--warm" id="btn-continue-celebration" hidden>
+        continue
+      </button>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       STAGE 5 — CELEBRATION
+  ============================================================= -->
+  <section class="stage stage--celebration" id="stage-celebration" aria-live="polite">
+    <div class="celebration-wrap">
+      <div class="status-card">
+        <div class="status-title">SISTER v26.0</div>
+        <div class="status-row"><span>STATUS</span><span class="status-value status-value--ok">✓ Successfully upgraded</span></div>
+        <div class="status-row"><span>SYSTEM HEALTH</span><span class="status-value">100%</span></div>
+        <div class="status-row"><span>HAPPINESS</span><span class="status-value">∞</span></div>
+      </div>
+
+      <button class="btn btn--celebrate" id="btn-celebrate">
+        <span class="btn-bracket">[</span> ./celebrate.sh <span class="btn-bracket">]</span>
+      </button>
+
+      <div class="final-text" id="final-text" hidden></div>
+
+      <button class="music-toggle" id="music-toggle" hidden aria-label="Play birthday song">
+        <span id="music-icon">▶</span> <span id="music-label">play song</span>
+      </button>
+      <audio id="bg-audio" loop preload="none"></audio>
+    </div>
+
+    <div class="cake-wrap" id="cake-wrap" hidden>
+      <div class="cake">
+        <div class="cake-candle"><div class="cake-flame"></div></div>
+        <div class="cake-layer cake-layer--top"></div>
+        <div class="cake-layer cake-layer--mid"></div>
+        <div class="cake-layer cake-layer--base"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+<script src="js/config.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
