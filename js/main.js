@@ -52,9 +52,16 @@
     const ring = document.querySelector('.cursor-ring');
     if (!dot || !ring || typeof gsap === 'undefined') return;
 
+    document.documentElement.classList.add('has-custom-cursor');
+
+    let revealed = false;
     window.addEventListener('mousemove', (e) => {
       gsap.set(dot, { x: e.clientX, y: e.clientY });
       gsap.to(ring, { x: e.clientX, y: e.clientY, duration: 0.25, ease: 'power2.out' });
+      if (!revealed) {
+        revealed = true;
+        gsap.to([dot, ring], { opacity: 1, duration: 0.3 });
+      }
     });
 
     document.querySelectorAll('a, button, .hoverable, .magnetic').forEach((el) => {

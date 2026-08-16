@@ -182,9 +182,9 @@ body:has(.hero) .site-header:not(.is-scrolled) .nav-links a.is-active {
   color: var(--text-primary);
 }
 
-body:has(.hero) .site-header:not(.is-scrolled) .nav-toggle span,
-body:has(.hero) .site-header:not(.is-scrolled) .nav-toggle span::before,
-body:has(.hero) .site-header:not(.is-scrolled) .nav-toggle span::after {
+body:has(.hero) .site-header:not(.is-scrolled) .nav-toggle:not(.is-open) span,
+body:has(.hero) .site-header:not(.is-scrolled) .nav-toggle:not(.is-open) span::before,
+body:has(.hero) .site-header:not(.is-scrolled) .nav-toggle:not(.is-open) span::after {
   background: var(--text-primary);
 }
 
@@ -294,6 +294,22 @@ body:has(.hero) .site-header:not(.is-scrolled) .nav-toggle span::after {
   top: 0;
   transform: rotate(-45deg);
   background: var(--text-inverse);
+}
+
+/* Keep the close (X) button above the full-screen mobile menu it controls —
+   .nav-overlay's z-index otherwise sits above .site-header's whole stacking
+   context and swallows clicks on the toggle button inside it. */
+.site-header.nav-open {
+  z-index: 1002;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+.site-header.nav-open .nav-logo {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .nav-overlay {
@@ -619,12 +635,14 @@ body:has(.hero) .site-header:not(.is-scrolled) .nav-toggle span::after {
   width: 6px;
   height: 6px;
   background: var(--accent-primary);
+  opacity: 0;
 }
 
 .cursor-ring {
   width: 36px;
   height: 36px;
   border: 1.5px solid rgba(26, 107, 74, 0.4);
+  opacity: 0;
 }
 
 @media (hover: none), (max-width: 768px) {
@@ -632,4 +650,10 @@ body:has(.hero) .site-header:not(.is-scrolled) .nav-toggle span::after {
   .cursor-ring {
     display: none !important;
   }
+}
+
+.has-custom-cursor,
+.has-custom-cursor a,
+.has-custom-cursor button {
+  cursor: none;
 }

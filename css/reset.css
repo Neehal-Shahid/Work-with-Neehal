@@ -9,11 +9,13 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: auto;
+  overflow-x: hidden;
 }
 
 body {
   min-height: 100vh;
   line-height: 1.5;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;

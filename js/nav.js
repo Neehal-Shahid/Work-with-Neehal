@@ -19,6 +19,7 @@
       const closeMenu = () => {
         toggle.classList.remove('is-open');
         overlay.classList.remove('is-open');
+        if (header) header.classList.remove('nav-open');
         document.body.style.overflow = '';
         toggle.setAttribute('aria-expanded', 'false');
         overlay.setAttribute('aria-hidden', 'true');
@@ -27,6 +28,7 @@
       toggle.addEventListener('click', () => {
         const open = toggle.classList.toggle('is-open');
         overlay.classList.toggle('is-open', open);
+        if (header) header.classList.toggle('nav-open', open);
         document.body.style.overflow = open ? 'hidden' : '';
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
         overlay.setAttribute('aria-hidden', open ? 'false' : 'true');
