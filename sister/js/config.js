@@ -18,8 +18,12 @@ window.birthdayData = {
 
   // ----------------------------------------------------------
   // GIT COMMIT HISTORY
-  // Each entry is one "commit" in her life. Click order = array
-  // order. Add, remove, or reorder freely — the UI adapts.
+  // Each entry is one "commit." Click order = array order.
+  // Add, remove, or reorder freely — the UI adapts.
+  //
+  // These are written as general appreciation/wishes rather than
+  // specific memories — easy to keep as-is, or swap any line for
+  // a real memory later if you ever want to.
   //
   //   hash    -> any 7-character string, purely cosmetic
   //   title   -> the commit message shown in the log
@@ -31,37 +35,37 @@ window.birthdayData = {
     {
       hash: "f4a1c9e",
       title: "feat: survived another year",
-      memory: "One of my favorite memories with you... (replace this with the actual memory, Neehal).",
+      memory: "Another year in the books. You make it look easier than it probably is.",
       photo: null
     },
     {
       hash: "9b2d0aa",
       title: "feat: became a software engineer",
-      memory: "Something I'll always remember about watching you get here...",
+      memory: "Building an actual career out of nothing but hard work — still impressive to me, every time I think about it.",
       photo: null
     },
     {
       hash: "c73e881",
-      title: "feat: collected countless memories",
-      memory: "That one trip / day / random moment we still talk about...",
+      title: "feat: showed up for the family, every time",
+      memory: "You've done more for this family than you probably give yourself credit for. I notice it, even when I don't say so.",
       photo: null
     },
     {
       hash: "1de5f6b",
-      title: "feat: became stronger",
-      memory: "A moment I saw how much you'd grown, even if you didn't notice it yourself...",
+      title: "feat: carried more than she let on",
+      memory: "Being the older one comes with a weight nobody really thanks you for. So — thank you.",
       photo: null
     },
     {
       hash: "77a0c3d",
       title: "feat: made family proud",
-      memory: "Something specific you did that made all of us proud of you...",
+      memory: "Every year you add to that list. Genuinely.",
       photo: null
     },
     {
       hash: "e26v1.0",
       title: "release: sister-v26.0",
-      memory: "Here's to this next year — and everything you're about to build.",
+      memory: "Here's to whatever you build next. I hope it's good to you, for once.",
       photo: null
     }
   ],
@@ -74,11 +78,11 @@ window.birthdayData = {
   // ----------------------------------------------------------
   message: [
     `Happy 26th birthday, Laiba.`,
-    `I'm genuinely proud of the person you've become.`,
-    `You've worked hard, grown so much, and built a life that deserves to be celebrated.`,
-    `I'm lucky to have you as my sister.`,
-    `I hope 26 brings you happiness, success, peace, new experiences, and everything you're working toward.`,
-    `And no matter how many versions you release, you'll always be one of the most important people in my life.`,
+    `I don't say this enough, but I'm proud of who you've become.`,
+    `You've worked hard and grown a lot — and honestly, you've done more for this family, and for me, than I've ever properly thanked you for.`,
+    `Being the older one isn't always easy, and I know you've carried more of that than you let on.`,
+    `I hope this year gives some of that back to you — happiness, peace, and good things that are just for you.`,
+    `You'll always be my sister, no matter how many versions you release.`,
     `Happy birthday.`
   ],
 
