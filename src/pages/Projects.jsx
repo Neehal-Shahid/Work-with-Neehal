@@ -24,7 +24,7 @@ export default function Projects() {
     <div ref={rootRef}>
       <SEO
         title="Projects — Work With Neehal"
-        description="Real WordPress projects for agencies, solar, and energy businesses — React case studies coming soon."
+        description="Real WordPress projects for agencies, solar, and energy businesses, built by a developer who also ships production React — this site is the proof."
       />
 
       <main>
@@ -32,7 +32,7 @@ export default function Projects() {
           <div className="container" data-animate="fade-up">
             <span className="section-label">Projects</span>
             <h1>Work that works.</h1>
-            <p className="section-sub" style={{ marginTop: 16 }}>Four live WordPress projects across four different businesses. React case studies are on the way.</p>
+            <p className="section-sub" style={{ marginTop: 16 }}>Four live WordPress projects across four different businesses — real clients, live sites, no mockups.</p>
           </div>
         </section>
 
@@ -72,6 +72,10 @@ export default function Projects() {
                 </Link>
               ))}
             </div>
+
+            <p className="self-proof" data-animate="fade-up">
+              <strong>Looking for React work?</strong> You're standing on it. This entire site is a custom React 18 + Vite build — no template, no page builder.
+            </p>
           </div>
         </section>
       </main>

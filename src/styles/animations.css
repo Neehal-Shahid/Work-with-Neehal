@@ -953,18 +953,11 @@
 
 .masonry-card img {
   width: 100%;
-  aspect-ratio: 16/10;
-  object-fit: contain;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  object-position: top center;
   background: #0a0a0a;
   transition: transform 0.5s ease;
-}
-
-.masonry-card:nth-child(3n) img {
-  aspect-ratio: 3/4;
-}
-
-.masonry-card:nth-child(5n) img {
-  aspect-ratio: 1/1;
 }
 
 .masonry-card:hover img {

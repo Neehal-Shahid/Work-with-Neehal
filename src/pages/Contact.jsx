@@ -109,7 +109,7 @@ export default function Contact() {
       <main>
         <section className="page-hero page-hero--center">
           <div className="container" data-animate="fade-up">
-            <h1>Let's figure out what<br />your project should do.</h1>
+            <h1>Let's figure out what your project should do.</h1>
             <p className="section-sub">Fill in the form and I'll reply within one business day — usually faster.</p>
           </div>
         </section>

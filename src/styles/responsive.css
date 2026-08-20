@@ -54,6 +54,13 @@
     --section-pad: 72px;
   }
 
+  /* Tight desktop tracking on large display type can shave a hair too
+     much off the last word on a wrapped line at narrow widths — ease it
+     off on mobile where headings are smaller and the effect isn't needed. */
+  h1, h2, h3 {
+    letter-spacing: var(--tracking-normal);
+  }
+
   .nav-links,
   .nav-cta .btn-primary {
     display: none;

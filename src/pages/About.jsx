@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import useScrollReveal from '../hooks/useScrollReveal';
@@ -27,6 +27,7 @@ const SKILLS = [
 
 export default function About() {
   const rootRef = useRef(null);
+  const [openTag, setOpenTag] = useState(null);
   useScrollReveal(rootRef);
 
   return (
@@ -94,9 +95,20 @@ export default function About() {
             </div>
             <div className="skills-cloud" data-animate="fade-up">
               {SKILLS.map((skill) => (
-                <span className="skill-tag" data-size={skill.size} data-tip={skill.tip} key={skill.name}>{skill.name}</span>
+                <button
+                  type="button"
+                  className={`skill-tag${openTag === skill.name ? ' is-open' : ''}`}
+                  data-size={skill.size}
+                  data-tip={skill.tip}
+                  key={skill.name}
+                  aria-pressed={openTag === skill.name}
+                  onClick={() => setOpenTag((cur) => (cur === skill.name ? null : skill.name))}
+                >
+                  {skill.name}
+                </button>
               ))}
             </div>
+            <p className="skills-hint" data-animate="fade-up">Tap or hover a skill for what it actually means for your project.</p>
           </div>
         </section>
 

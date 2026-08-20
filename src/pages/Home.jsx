@@ -140,6 +140,18 @@ export default function Home() {
                 <span className="proof-metric-label">Typical reply window on new inquiries</span>
               </div>
             </div>
+            <div className="stack-strip" data-animate="fade-up">
+              <span className="stack-strip-label">The toolkit</span>
+              <div className="stack-strip-chips">
+                <span className="chip chip--react">React</span>
+                <span className="chip chip--react">Vite</span>
+                <span className="chip chip--react">React Router</span>
+                <span className="chip chip--react">GSAP</span>
+                <span className="chip chip--wp">WordPress</span>
+                <span className="chip chip--wp">Elementor</span>
+                <span className="chip chip--wp">WooCommerce</span>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -205,7 +217,7 @@ export default function Home() {
             <div className="section-header" data-animate="fade-up">
               <span className="section-label">Selected Work</span>
               <h2>Projects that did the job.</h2>
-              <p className="section-sub" style={{ marginTop: 16 }}>Live WordPress client sites built for agencies, solar, and energy businesses — React case studies are on the way.</p>
+              <p className="section-sub" style={{ marginTop: 16 }}>Live WordPress client sites built for agencies, solar, and energy businesses.</p>
             </div>
 
             <div className="projects-stack">
@@ -232,6 +244,10 @@ export default function Home() {
             <div className="projects-cta">
               <Link to="/projects" className="btn-outline magnetic">See All Projects <span className="btn-arrow">→</span></Link>
             </div>
+
+            <p className="self-proof" data-animate="fade-up">
+              <strong>Full disclosure:</strong> this site is the React case study. React 18, Vite, React Router, and hand-rolled GSAP scroll animation — no template, no page builder.
+            </p>
           </div>
         </section>
 
@@ -311,7 +327,7 @@ export default function Home() {
                 <div className="testimonial-stars" aria-label="5 stars">★★★★★</div>
                 <blockquote>Neehal fixed in 3 hours what our previous developer couldn't fix in 3 weeks. Genuine, fast, and actually explains what he did.</blockquote>
                 <div className="testimonial-footer">
-                  <img className="testimonial-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Portrait of Sarah T." width="44" height="44" loading="lazy" />
+                  <div className="testimonial-avatar" aria-hidden="true">ST</div>
                   <div>
                     <p className="testimonial-author">Sarah T.</p>
                     <p className="testimonial-role">Owner, Bloom Florals</p>
@@ -323,7 +339,7 @@ export default function Home() {
                 <div className="testimonial-stars" aria-label="5 stars">★★★★★</div>
                 <blockquote>We migrated our entire 8-year-old site and didn't lose a single page. The new version loads in under a second. Worth every penny.</blockquote>
                 <div className="testimonial-footer">
-                  <img className="testimonial-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Portrait of James K." width="44" height="44" loading="lazy" />
+                  <div className="testimonial-avatar" aria-hidden="true">JK</div>
                   <div>
                     <p className="testimonial-author">James K.</p>
                     <p className="testimonial-role">Marketing Director, Horizon Legal</p>
@@ -335,7 +351,7 @@ export default function Home() {
                 <div className="testimonial-stars" aria-label="5 stars">★★★★★</div>
                 <blockquote>I've worked with four different developers over the years. Neehal is the only one I've brought back for a second and third project.</blockquote>
                 <div className="testimonial-footer">
-                  <img className="testimonial-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Portrait of Maria L." width="44" height="44" loading="lazy" />
+                  <div className="testimonial-avatar" aria-hidden="true">ML</div>
                   <div>
                     <p className="testimonial-author">Maria L.</p>
                     <p className="testimonial-role">Founder, LiftOff Coaching</p>
