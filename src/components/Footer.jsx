@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container">
         <div className="footer-grid">
           <div className="footer-brand">
-            <img src="/assets/images/logo.png" alt="Work With Neehal" width="140" height="36" />
+            <img src="/assets/images/logo.webp" alt="Work With Neehal" width="140" height="36" />
             <p>Websites and web apps that earn their keep — WordPress and React work built for owners who want results, not just polish.</p>
           </div>
           <div className="footer-col">

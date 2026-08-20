@@ -109,6 +109,8 @@ export default function Home() {
                 className="hero-media-img"
                 ref={mediaImgRef}
                 src="/images/hero-neehal.webp"
+                srcSet="/images/hero-neehal-480.webp 480w, /images/hero-neehal.webp 900w"
+                sizes="(max-width: 768px) 340px, 520px"
                 alt="Muhammad Neehal Shahid"
                 width="900"
                 height="900"
@@ -227,7 +229,15 @@ export default function Home() {
                   <div className="project-row-scale">
                     <div className="project-row-inner shimmer-card glow-card">
                       <div className="project-image">
-                        <img src={project.cardImage} alt={`${project.name} website mockup`} width="800" height="560" loading="lazy" />
+                        <img
+                          src={project.cardImage}
+                          srcSet={`${project.cardImageSmall} 480w, ${project.cardImage} 900w`}
+                          sizes="(max-width: 768px) 92vw, 560px"
+                          alt={`${project.name} website mockup`}
+                          width="800"
+                          height="560"
+                          loading="lazy"
+                        />
                       </div>
                       <div className="project-content">
                         <span className="badge badge--industry">{project.industry}</span>

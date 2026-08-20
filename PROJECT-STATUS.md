@@ -21,7 +21,14 @@ touching code — it has the context a fresh session won't have.
 - Lenis — smooth scroll (`useLenis` hook)
 - vanilla-tilt — tilt effect on project/masonry cards (`useTilt` hook)
 - Custom hooks: `useCursorMagnetic`, `useHeroIntro`, `useScrollReveal`, `useTilt`, `useLenis`
-- Fonts: **Satoshi** (headings, via Fontshare CDN) + **Manrope** (body, via Google Fonts)
+- Fonts: **Satoshi** (headings) + **Manrope** (body) — both fully self-hosted
+  as WOFF2 in `public/assets/fonts/`, declared in `src/styles/typography.css`.
+  No Google Fonts / Fontshare `<link>` in `index.html` — removed deliberately
+  for performance, see Session Log (3). Don't re-add an external font
+  `<link>` without checking `typography.css` first.
+- Images: WebP only (`public/images/`, `public/assets/images/`), including
+  `-480w` small variants for the hero + project cards used with `srcSet` on
+  mobile-visible pages (Home, Projects). See Session Log (2) and (3).
 - Forms: Web3Forms (client-side access key in `Contact.jsx` — this is normal/expected for Web3Forms, not a leaked secret)
 - Deployment: Cloudflare Pages via `wrangler.jsonc` (`npm run build` → `dist/`, SPA fallback configured in `_redirects` and `wrangler.jsonc`)
 
@@ -65,6 +72,88 @@ permission) as they come in — keep the card structure (`.testimonial-card`
 in `Home.jsx`) identical.
 
 ## Session Log
+
+### 2026-08-20 (3) — Performance pass 2: killed render-blocking font requests
+
+User re-ran PageSpeed after pass (2) below: desktop improved, but mobile was
+still 78, with "Render-blocking requests" flagged at **~1,940ms** — the
+Google Fonts CSS fetch, the Fontshare CSS fetch, and the app's own bundled
+CSS, all as blocking `<link rel="stylesheet">` tags in `<head>`.
+
+Root cause, and the mistake to not repeat: **`src/styles/typography.css`
+already had a complete, working, self-hosted `@font-face` setup for Satoshi**
+(10 weights/styles, local `.otf` files in `public/assets/fonts/`) that
+predates session (1). When I "discovered" in session (1) that headings
+weren't rendering in Satoshi and added the Fontshare CDN `<link>` as a fix,
+I hadn't checked for an existing local `@font-face` — I only checked
+`index.html` for a `<link>` tag. The local font was very likely already
+working; adding Fontshare on top of it didn't fix anything, it just added a
+second, redundant, render-blocking external stylesheet request. **Lesson:
+before concluding a font "isn't loading," grep for `@font-face` across the
+CSS, not just `<link>` tags in the HTML head.**
+
+Fixed properly this time — fully self-hosted, zero external font requests:
+- Removed the Fontshare `<link rel="stylesheet">` + its `preconnect` from
+  `index.html` entirely.
+- Removed the Google Fonts (Manrope) `<link rel="stylesheet">` +
+  `fonts.googleapis.com`/`fonts.gstatic.com` `preconnect`s too — self-hosted
+  Manrope instead of just Satoshi, for the same reason.
+- Converted the 10 local Satoshi files from `.otf` to `.woff2` (via
+  `fontTools`, `flavor="woff2"`) — 479KB → 259KB combined, and WOFF2 is the
+  correct web format (OTF was never meant for network delivery).
+- Manrope: Google Fonts actually serves it as **one variable font file**
+  covering weight 200–800 for the Latin subset — the same physical
+  `.woff2` URL is returned for every requested weight (400/500/600/700).
+  Downloaded that one file (`Manrope-Variable.woff2`, 24.8KB) and declared
+  it with `font-weight: 200 800` in one `@font-face` rule instead of one
+  rule per weight.
+- Kept all 10 Satoshi `@font-face` declarations (not just the 5 weights
+  actually used) — this costs nothing: browsers only fetch a `@font-face`
+  file if some rendered text actually needs that exact weight/style, so
+  unused declarations never trigger a network request. Confirmed this is
+  true in practice — the PageSpeed trace before this fix showed only 5 of
+  the 10 declared OTF files were ever downloaded.
+- Added `<link rel="preload" as="font">` for the two fonts almost certainly
+  needed for first paint (`Manrope-Variable.woff2`, `Satoshi-Bold.woff2`).
+- Deleted the old `.otf` files.
+
+Also addressed the "Improve image delivery" finding (103 KiB) from the same
+report — three images were being served at their full desktop resolution
+even to narrow mobile viewports:
+- Logo: was `1262×391` PNG (16.2 KB) displayed at max `160×36` — regenerated
+  as a `320×99` lossless WebP (10 KB) sized for 2x retina at actual display
+  size, used in `Header.jsx`/`Footer.jsx`. Left `logo.png` in place
+  untouched and still referenced by `og:image`/`twitter:image` in
+  `index.html` — those aren't fetched on page load (only when a link is
+  shared) so they're not a performance concern, and PNG has more reliable
+  support across social-preview crawlers than WebP, so that one was left as
+  a PNG deliberately, not an oversight.
+- Hero image and all 4 project `cardImage`s: generated an additional
+  `-480w` WebP variant (`hero-neehal-480.webp`, and `card-480.webp` per
+  project, added as `cardImageSmall` in `src/data/projects.js`) and wired
+  up `srcSet`/`sizes` on the `<img>` tags in `Home.jsx` (hero image +
+  featured-project rows) and `Projects.jsx` (masonry grid) so mobile
+  downloads the small variant instead of the 900w desktop one. Also added
+  matching `imagesrcset`/`imagesizes` to the hero's `<link rel="preload">`
+  so the preload and the actual `<img>` selection agree on which file to
+  fetch. **Deliberately did not** add responsive variants to
+  `ProjectDetail.jsx`'s reuse of `cardImage` (hero mockup + gallery) — that
+  page displays it much larger (up to ~1100px), where a 480w image would
+  look soft; it correctly keeps using the full 900w file there.
+
+Verified: `npm run build` clean, then screenshot-checked the actual
+**production build** (`vite preview`) at desktop and mobile widths —
+identical visual output to before (Satoshi/Manrope render correctly, no
+broken images, logo crisp), confirmed via `dist/index.html` that no
+external font `<link>` remains and `dist/assets/fonts` only contains
+`.woff2`. Total `dist/` is now ~1.3MB (was tens of MB before either
+performance pass).
+
+**If mobile PageSpeed is still not where it should be after this,** don't
+assume it's fonts or images again — re-read the new report. The next most
+likely levers, not yet touched: JS execution/hydration cost on low-end
+mobile CPUs (report showed a few "forced reflow" and "long task" entries
+attributed to the app bundle), or Total Blocking Time if it stops being 0ms.
 
 ### 2026-08-20 (2) — Performance pass: images to WebP, PageSpeed fix
 

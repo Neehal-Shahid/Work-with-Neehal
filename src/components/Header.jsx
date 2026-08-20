@@ -47,7 +47,7 @@ export default function Header() {
       <header className={`site-header${isScrolled ? ' is-scrolled' : ''}${isOpen ? ' nav-open' : ''}`}>
         <div className="container nav">
           <NavLink to="/" className="nav-logo" aria-label="Work With Neehal home">
-            <img src="/assets/images/logo.png" alt="Work With Neehal" width="160" height="40" />
+            <img src="/assets/images/logo.webp" alt="Work With Neehal" width="160" height="40" />
           </NavLink>
           <nav className="nav-links" aria-label="Primary">
             {NAV_LINKS.map((link) => (

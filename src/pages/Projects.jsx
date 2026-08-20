@@ -63,6 +63,8 @@ export default function Projects() {
                   <span className="masonry-chip">{project.industry}</span>
                   <img
                     src={project.cardImage}
+                    srcSet={`${project.cardImageSmall} 480w, ${project.cardImage} 900w`}
+                    sizes="(max-width: 768px) 90vw, 45vw"
                     alt={`${project.name} website`}
                     width={project.cardWidth}
                     height={project.cardHeight}
