@@ -10,7 +10,7 @@ export default function Footer() {
             <p>Websites and web apps that earn their keep — WordPress and React work built for owners who want results, not just polish.</p>
           </div>
           <div className="footer-col">
-            <h4>Navigate</h4>
+            <h3>Navigate</h3>
             <Link to="/">Home</Link>
             <Link to="/projects">Projects</Link>
             <Link to="/services">Services</Link>
@@ -18,7 +18,7 @@ export default function Footer() {
             <Link to="/contact">Contact</Link>
           </div>
           <div className="footer-col">
-            <h4>Connect</h4>
+            <h3>Connect</h3>
             <a href="mailto:workwithneehal@gmail.com">workwithneehal@gmail.com</a>
             <a href="https://www.linkedin.com/in/muhammad-neehal" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             <a href="https://www.upwork.com/freelancers/~0120b83d0374ed789b?mp_source=share" target="_blank" rel="noopener noreferrer">Upwork</a>

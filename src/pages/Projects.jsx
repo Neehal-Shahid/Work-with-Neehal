@@ -38,6 +38,7 @@ export default function Projects() {
 
         <section className="section section--cream">
           <div className="container">
+            <h2 className="sr-only">All projects</h2>
             <div className="filter-tabs" role="tablist" aria-label="Filter projects">
               {FILTERS.map((f) => (
                 <button

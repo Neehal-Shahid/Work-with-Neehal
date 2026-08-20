@@ -1,0 +1,26 @@
+# Work With Neehal
+
+> Muhammad Neehal Shahid is a frontend developer (React) and WordPress developer based in Karachi, Pakistan, building websites and web apps for agencies, startups, and local businesses.
+
+Work With Neehal covers two service tracks: WordPress for content-driven business sites the client can edit themselves, and React (Vite) for products that need real interactivity — dashboards, custom logic, and interfaces WordPress can't cleanly handle. This site itself is a React 18 + Vite build, not a page builder or template.
+
+## Pages
+
+- [Home](https://workwithneehal.com/): Overview, featured work, the difference between this and a typical freelancer, and the two service tracks.
+- [Projects](https://workwithneehal.com/projects): Four live WordPress case studies for real clients — an agency, a solar company, and an electrical contractor.
+- [Services](https://workwithneehal.com/services): Full breakdown of both tracks — WordPress (business websites, landing pages, WooCommerce, migrations, performance, maintenance) and React (web apps, marketing sites, frontend modernization, component libraries).
+- [About](https://workwithneehal.com/about): How Neehal works, what he values (clarity, ownership, reliability, craft), and the tools he uses.
+- [Contact](https://workwithneehal.com/contact): Project inquiry form, plus email/LinkedIn/Upwork.
+
+## Case studies
+
+- [Hamkoders](https://workwithneehal.com/projects/hamkoders): Creative/digital agency site (hamkoders.com).
+- [The Brandbyte](https://workwithneehal.com/projects/brandbyte): AI-powered digital agency site (thebrandbyte.com).
+- [Flip Solar](https://workwithneehal.com/projects/flipsolar): Solar company site with a load calculator (theflipsolar.com).
+- [Elfa Energy](https://workwithneehal.com/projects/elfaenergy): Electrical contracting & MEP services site (elfaenergy.com).
+
+## Contact
+
+- Email: workwithneehal@gmail.com
+- LinkedIn: https://www.linkedin.com/in/muhammad-neehal
+- Upwork: https://www.upwork.com/freelancers/~0120b83d0374ed789b

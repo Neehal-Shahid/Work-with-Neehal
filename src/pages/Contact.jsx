@@ -117,7 +117,14 @@ export default function Contact() {
         <section className="section section--cream contact-section" style={{ paddingTop: 0 }}>
           <div className="container">
             <div className="contact-grid">
-              <form id="contact-form" noValidate data-animate="fade-up" onSubmit={handleSubmit}>
+              <form
+                id="contact-form"
+                noValidate
+                data-animate="fade-up"
+                onSubmit={handleSubmit}
+                toolname="contact_project_inquiry"
+                tooldescription="Send a project inquiry to Neehal — describe what you need (WordPress site, React app, landing page, etc.) and get a reply within one business day."
+              >
                 <input type="checkbox" name="botcheck" className="form-honeypot" tabIndex="-1" autoComplete="off" aria-hidden="true" />
 
                 <div className={`form-group${errors.name ? ' has-error' : ''}`}>
@@ -128,6 +135,7 @@ export default function Contact() {
                     name="name"
                     autoComplete="name"
                     required
+                    toolparamdescription="Full name of the person making the inquiry"
                     className={errors.name ? 'is-error' : undefined}
                     value={values.name}
                     onChange={handleChange}
@@ -144,6 +152,7 @@ export default function Contact() {
                     name="email"
                     autoComplete="email"
                     required
+                    toolparamdescription="Email address to reply to"
                     className={errors.email ? 'is-error' : undefined}
                     value={values.email}
                     onChange={handleChange}
@@ -159,6 +168,7 @@ export default function Contact() {
                     id="website"
                     name="website"
                     placeholder="yoursite.com or leave blank"
+                    toolparamdescription="The inquirer's current website URL, if they have one (optional)"
                     value={values.website}
                     onChange={handleChange}
                   />
@@ -170,6 +180,7 @@ export default function Contact() {
                     id="need"
                     name="need"
                     required
+                    toolparamdescription="Type of project needed"
                     className={errors.need ? 'is-error' : undefined}
                     value={values.need}
                     onChange={handleChange}
@@ -196,6 +207,7 @@ export default function Contact() {
                     name="message"
                     placeholder="What does your business do? What's not working? What would success look like? You don't need to have all the answers — just start."
                     required
+                    toolparamdescription="Project details — what the business does, what's not working, what success would look like"
                     className={errors.message ? 'is-error' : undefined}
                     value={values.message}
                     onChange={handleChange}
@@ -217,7 +229,7 @@ export default function Contact() {
               </form>
 
               <aside className="glass-card expect-card shimmer-card" data-animate="fade-up">
-                <h3>After you send this</h3>
+                <h2>After you send this</h2>
                 <ul>
                   <li>I'll read it properly (not skim it)</li>
                   <li>I'll reply within one business day</li>

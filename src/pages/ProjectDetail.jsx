@@ -74,7 +74,7 @@ export default function ProjectDetail() {
               {project.process.map((step, i) => (
                 <div className="mini-step" key={step.title}>
                   <div className="num">{String(i + 1).padStart(2, '0')}</div>
-                  <h4>{step.title}</h4>
+                  <h3>{step.title}</h3>
                   <p>{step.desc}</p>
                 </div>
               ))}

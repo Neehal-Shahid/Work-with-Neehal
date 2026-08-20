@@ -1076,7 +1076,7 @@
   margin-bottom: 12px;
 }
 
-.mini-step h4 {
+.mini-step h3 {
   font-size: var(--text-base);
   margin-bottom: 8px;
 }
@@ -1310,7 +1310,7 @@
   top: calc(var(--nav-height) + 24px);
 }
 
-.expect-card h3 {
+.expect-card h2 {
   font-size: var(--text-xl);
   margin-bottom: 24px;
 }

@@ -73,6 +73,67 @@ in `Home.jsx`) identical.
 
 ## Session Log
 
+### 2026-08-20 (4) — Agentic Browsing (new Lighthouse category, May 2026)
+
+User asked what "agentic browsing" is after seeing a 2/3 (later understood
+as X/4) score in PageSpeed Insights. This is a real, very new Lighthouse
+category (shipped in Lighthouse 13.3.0, May 7 2026) — experimental, doesn't
+feed into Performance/Accessibility/Best Practices/SEO scores, scores as a
+pass-count ratio out of 4 checks rather than 0–100. It measures how ready a
+page is for AI agents (browser-using assistants) to read, understand, and
+act on it:
+
+1. **Accessibility tree formation** — proper semantic HTML / correct heading
+   hierarchy / ARIA. Fixed real violations found via grep across every page
+   (several predate this session — not something I introduced):
+   - `Footer.jsx`: nav-column headings were `<h4>`, but the footer appears
+     on every page and almost always directly follows an `<h2>` (or in
+     `NotFound`'s case, straight after `<h1>`) — an `h2 → h4` skip. Changed
+     to `<h3>` (`.footer-col h4` → `.footer-col h3` in `layout.css`).
+   - `ProjectDetail.jsx`: the mini-timeline step titles were `<h4>`
+     directly under the "Key moments." `<h2>` with nothing between — skip.
+     Changed to `<h3>` (`.mini-step h4` → `.mini-step h3` in
+     `animations.css`).
+   - `Contact.jsx`: the "After you send this" aside was the *only* other
+     heading on the page besides the `<h1>` — was `<h3>`, an `h1 → h3`
+     skip. Changed to `<h2>` (`.expect-card h3` → `.expect-card h2`).
+   - `Projects.jsx`: no `<h2>` on the page at all before the masonry
+     grid's `<h3>` project-name cards — `h1 → h3` skip. Added a
+     `.sr-only` `<h2>All projects</h2>` (new `.sr-only` utility class in
+     `extras.css`) right before the grid — present for the accessibility
+     tree/agents, invisible on screen.
+   - `NotFound.jsx`: same `h1 → h3`(footer) skip — added a `.sr-only`
+     `<h2>Page not found</h2>`.
+   - Verified with real headless-Chrome screenshots (not just build success)
+     that none of these tag swaps changed anything visually — every one of
+     them had an explicit CSS font-size override already keyed to the old
+     tag, updated in lockstep.
+2. **llms.txt** — didn't exist. Added `public/llms.txt` (H1, one-line
+   summary, links to all 5 pages + all 4 project case studies + contact
+   info) per the llms.txt convention.
+3. **Cumulative Layout Shift** — already 0 per the Performance report, this
+   check should already pass, nothing to do.
+4. **WebMCP** — experimental (Chrome Canary only), lets a page declare its
+   forms as agent-callable tools via HTML attributes (declarative API) or
+   `navigator.modelContext.registerTool()` (imperative). Added the
+   declarative attributes to the Contact form (`Contact.jsx`): `toolname`,
+   `tooldescription` on the `<form>`, `toolparamdescription` on each field.
+   Deliberately did **not** add `toolautosubmit` — that would let an agent
+   submit the form without a human confirming first, and this form sends a
+   real inquiry to Neehal's inbox; auto-submit risks agent-generated noise/
+   spam. These are non-standard attributes with zero downside if unsupported
+   (any browser/tool that doesn't understand `toolname` etc. just ignores
+   it — verified this doesn't break React rendering or the existing
+   validation/submit logic).
+
+Didn't attempt to independently verify the resulting score (Chrome Canary
+required to run this Lighthouse category at all, wasn't available in this
+environment) — these are the documented, sourced fixes for exactly what the
+audit checks; ask for the new score after a re-run.
+
+Sources used (this category is newer than my training data, so I searched
+rather than guessed): [DebugBear — Lighthouse Agentic Browsing category explained](https://www.debugbear.com/blog/lighthouse-agentic-browsing), [Semrush — Google adds Agentic Browsing to Lighthouse](https://www.semrush.com/blog/google-adds-agentic-browsing-category-to-lighthouse/), [AgentCat — declarative WebMCP HTML form attributes](https://agentcat.com/guides/declarative-webmcp-tools-html-form-attributes/).
+
 ### 2026-08-20 (3) — Performance pass 2: killed render-blocking font requests
 
 User re-ran PageSpeed after pass (2) below: desktop improved, but mobile was
