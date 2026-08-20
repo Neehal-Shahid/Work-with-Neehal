@@ -1,0 +1,26 @@
+/* Additions for the dual React/WordPress positioning — kept separate from
+   the ported stylesheet so the original files stay a clean 1:1 reference. */
+
+.badge--react {
+  background: rgba(196, 135, 58, 0.14);
+  color: var(--accent-warm);
+}
+
+.section-label--warm {
+  color: var(--accent-warm);
+}
+
+.service-track-badge {
+  display: inline-flex;
+  margin-bottom: 10px;
+}
+
+.track-divider {
+  margin: 96px 0 64px;
+  text-align: center;
+}
+
+.track-divider p {
+  max-width: 620px;
+  margin: 12px auto 0;
+}
