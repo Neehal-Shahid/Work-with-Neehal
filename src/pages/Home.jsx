@@ -108,10 +108,11 @@ export default function Home() {
               <img
                 className="hero-media-img"
                 ref={mediaImgRef}
-                src="/images/hero-neehal.png"
+                src="/images/hero-neehal.webp"
                 alt="Muhammad Neehal Shahid"
-                width="1024"
-                height="1024"
+                width="900"
+                height="900"
+                decoding="async"
                 {...{ fetchpriority: 'high' }}
               />
             </div>

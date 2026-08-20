@@ -66,7 +66,59 @@ in `Home.jsx`) identical.
 
 ## Session Log
 
-### 2026-08-20 — Professional/UX/content polish pass + mobile QA
+### 2026-08-20 (2) — Performance pass: images to WebP, PageSpeed fix
+
+User reported PageSpeed Insights ~69 mobile, slow FCP/LCP, suspected the
+hero. Root cause: **every image in `public/` was an uncompressed PNG,
+1.5–1.9MB each** — the hero portrait, and all 3 images (card/desktop/mobile)
+for each of the 4 project case studies. Home and Projects pages alone were
+pulling ~7–9MB of images. That's the dominant perf problem on every page,
+not just the hero.
+
+Fixed:
+- Converted all in-use images to WebP with Pillow (`quality=80–82`,
+  resized to realistic max display dimensions instead of the original
+  1536×1024 / 5772×4843 sources): hero portrait, and all 12 project images
+  (4 projects × card/desktop/mobile). **~22MB → ~0.55MB, about a 97%
+  reduction.** `dist/images` went 6.4MB → 60KB, `dist/assets/images` went
+  21MB → 564KB.
+- Updated every reference: `Home.jsx` hero `<img>`, and `cardImage` /
+  `desktopImage` / `mobileImage` in `src/data/projects.js`. Also corrected
+  the `cardWidth`/`cardHeight` metadata (was inconsistent — 600×400/800/600
+  across projects; now uniformly 900×600, matching the real new card image
+  ratio, matches the `aspect-ratio: 3/2` set on `.masonry-card img` from the
+  previous session's letterboxing fix).
+- Added `<link rel="preload" as="image" href="/images/hero-neehal.webp"
+  fetchpriority="high">` in `index.html` — the hero image is almost
+  certainly the LCP element on `/`, and this SPA doesn't request it until
+  after JS parses/mounts/renders Home without a preload hint, so this
+  should directly cut LCP. Trade-off: this preload fires on every route,
+  not just `/`, since there's one static `index.html` for the whole SPA —
+  minor wasted bytes on other pages, acceptable given the file is now only
+  ~56KB.
+- Deleted the superseded PNG originals (16 files) plus 3 already-dead,
+  never-referenced heavy PNGs found during cleanup (`neehal-hero-alt.png`
+  5772×4843, `neehal-portrait.png`, `screen.png` — none were imported
+  anywhere; confirmed via grep before deleting). All recoverable from git
+  history if ever needed.
+
+Verified: `npm run build` clean, then screenshot-checked hero + Projects
+masonry + a ProjectDetail page against the actual **production build**
+(`vite preview`, not dev mode) to confirm the preload + swapped paths work
+outside of Vite dev-server asset handling. No visible quality loss at these
+quality/size settings.
+
+**Not done / didn't touch:** JS bundle size (377KB / 126KB gzip — GSAP +
+Lenis + React Router, reasonable for what it does, wasn't the bottleneck
+here), font loading strategy (Fontshare + Google Fonts `<link
+rel=stylesheet>` are still render-blocking — self-hosting would shave a bit
+more off FCP but wasn't asked for and is a bigger lift), no CDN/image-service
+layer (Cloudflare Pages serves these as static files as-is). If PageSpeed is
+still not where it should be after this, re-run the audit and check whether
+the remaining time is font-loading, JS execution, or something else —
+don't assume it's still images.
+
+### 2026-08-20 (1) — Professional/UX/content polish pass + mobile QA
 
 Goal: make the site read as more professional, reinforce that the owner has
 strong React *and* WordPress skills, and verify mobile. Changes made:
