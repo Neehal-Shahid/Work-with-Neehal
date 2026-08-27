@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import SEO from '../components/SEO';
 import useScrollReveal from '../hooks/useScrollReveal';
 import { getProject } from '../data/projects';
+import { projectSeo, absoluteUrl } from '../data/seo';
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -14,17 +15,30 @@ export default function ProjectDetail() {
     return <Navigate to="/projects" replace />;
   }
 
+  const seo = projectSeo(project);
+
   return (
     <div ref={rootRef}>
       <SEO
-        title={`${project.name} — Work With Neehal`}
-        description={project.tagline}
+        title={seo.title}
+        description={seo.description}
+        image={seo.image}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+            { '@type': 'ListItem', position: 2, name: 'Projects', item: absoluteUrl('/projects') },
+            { '@type': 'ListItem', position: 3, name: project.name, item: absoluteUrl(seo.path) },
+          ],
+        }}
       />
 
       <main>
         <section className="page-hero">
           <div className="container" data-animate="fade-up">
-            <span className="badge badge--industry">{project.industry}</span>
+            <Link to="/projects" className="breadcrumb-link">← All Projects</Link>
+            <span className="badge badge--industry" style={{ marginTop: 16 }}>{project.industry}</span>
             <h1 style={{ marginTop: 20 }}>{project.name}</h1>
             <p className="section-sub" style={{ marginTop: 16 }}>{project.tagline}</p>
             <p style={{ marginTop: 20 }}>

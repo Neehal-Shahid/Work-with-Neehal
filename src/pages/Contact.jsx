@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react';
 import SEO from '../components/SEO';
 import useScrollReveal from '../hooks/useScrollReveal';
+import { staticPages } from '../data/seo';
+
+const contactSeo = staticPages.find((p) => p.key === 'contact');
 
 const WEB3FORMS_ACCESS_KEY = 'b51a245f-58dc-4f8b-8f6d-6a16bcb4c28f';
 
@@ -102,8 +105,8 @@ export default function Contact() {
   return (
     <div ref={rootRef} className="contact-page">
       <SEO
-        title="Contact — Work With Neehal"
-        description="Tell me about your React app or WordPress website. I'll reply within one business day — usually faster."
+        title={contactSeo.title}
+        description={contactSeo.description}
       />
 
       <main>

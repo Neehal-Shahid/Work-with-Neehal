@@ -13,6 +13,15 @@ touching code — it has the context a fresh session won't have.
   — the source design/copy spec this was built from. Keep it as reference;
   don't delete it. This file (`PROJECT-STATUS.md`) tracks *current state and
   decisions*, not the original brief.
+- **Standing task:** the user will periodically send more project case
+  studies to add — specifically **React-based** ones (see "Real content"
+  below for why that matters and exactly how to add one). Since Session Log
+  (5): adding a project to `src/data/projects.js` is now enough to get it
+  correct title/meta-description/OG-image/sitemap entry automatically
+  (`src/data/seo.js`'s `projectSeo()`) — no separate SEO step needed, just
+  remember to add its `og.jpg` (1200×630 crop of its desktop screenshot,
+  see Session Log (5) for how the existing ones were generated) and a
+  `-480.webp` small variant per the existing image convention.
 
 ## Tech stack (verified, as of 2026-08-20)
 
@@ -31,6 +40,16 @@ touching code — it has the context a fresh session won't have.
   mobile-visible pages (Home, Projects). See Session Log (2) and (3).
 - Forms: Web3Forms (client-side access key in `Contact.jsx` — this is normal/expected for Web3Forms, not a leaked secret)
 - Deployment: Cloudflare Pages via `wrangler.jsonc` (`npm run build` → `dist/`, SPA fallback configured in `_redirects` and `wrangler.jsonc`)
+- SEO: `src/data/seo.js` is the single source of truth for every route's
+  title/description/OG image — both the live `SEO.jsx` component and the
+  build scripts import it, so they can't drift. `npm run build` runs three
+  steps (`prebuild` → `vite build` → `postbuild`, via npm's automatic
+  pre/post hooks): regenerate `public/sitemap.xml`, build the SPA, then
+  prerender real static `dist/<route>/index.html` files with correct
+  per-route `<title>`/meta description/canonical/OG/Twitter tags and
+  JSON-LD baked in (`scripts/generate-sitemap.mjs`,
+  `scripts/prerender-seo.mjs`). See Session Log (5) for why this exists and
+  how to add a new route to it.
 
 No CMS, no backend. Pure static SPA.
 
@@ -40,6 +59,12 @@ No CMS, no backend. Pure static SPA.
 - `src/components/` — Header, Footer, BlobBackground, Faq, SEO
 - `src/data/projects.js` — the 4 real WordPress case studies (see below)
 - `src/data/services.js` — `wordpressServices` (6) + `reactServices` (4)
+- `src/data/seo.js` — per-route title/description/OG-image registry, used
+  by both `SEO.jsx` and the build scripts (see Session Log (5))
+- `src/data/faq.js` — the Home FAQ items; shared with the build script so
+  the FAQPage JSON-LD it generates can't drift from the visible accordion
+- `scripts/generate-sitemap.mjs`, `scripts/prerender-seo.mjs` — build-time
+  SEO scripts, run automatically by `npm run build` (see Session Log (5))
 - `src/styles/` — main.css imports in cascade order: variables → reset →
   typography → layout → components → animations → responsive → **extras**
   (extras.css is the newest file, kept separate so the "ported" original
@@ -72,6 +97,117 @@ permission) as they come in — keep the card structure (`.testimonial-card`
 in `Home.jsx`) identical.
 
 ## Session Log
+
+### 2026-08-27 (5) — Full SEO pass: technical + on-page + build-time prerendering
+
+User asked for full Google SEO: technical + on-page, indexability for every
+page, canonical tags, good titles/meta descriptions, internal linking. This
+was the biggest single architectural addition to the site — worth reading
+in full before touching anything SEO-related.
+
+**The core problem, and why it needed a build step, not just more React
+code:** this is a client-side-rendered SPA — `index.html` ships with an
+empty `<div id="root">`, and `SEO.jsx` only sets `<title>`/meta tags
+*after* React mounts (`useEffect`). Googlebot can execute JS and usually
+picks this up eventually, but (a) it's a slower, less reliable second-wave
+render, not guaranteed, and (b) almost nothing else respects it — Facebook/
+LinkedIn/X/Slack link-preview bots, and most non-Google search engines,
+never run JavaScript at all. Before this session, every single route
+shared the exact same static OG title/description/image (the homepage's) —
+sharing a link to any specific project page showed the *homepage's* card,
+not that project's. That's the concrete bug this session fixed.
+
+**The fix: prerender real static HTML per route at build time**, without
+switching frameworks or adding SSR. `npm run build` now runs three steps
+(via npm's automatic `prebuild`/`postbuild` hooks around the `build`
+script — see `package.json`):
+
+1. `scripts/generate-sitemap.mjs` (**prebuild**) — regenerates
+   `public/sitemap.xml` from `src/data/seo.js`'s route list, with today's
+   date as `<lastmod>`. Can never go stale/miss a project again.
+2. `vite build` — the normal SPA build, unchanged.
+3. `scripts/prerender-seo.mjs` (**postbuild**) — reads the just-built
+   `dist/index.html` as a template (so it has the real hashed asset
+   filenames) and, for every route except home, writes a customized
+   `dist/<route>/index.html`: correct `<title>`, meta description,
+   `<link rel="canonical">` (self-referencing, absolute URL), OG tags
+   (title/description/image/url, `image:width`/`height`), Twitter tags,
+   and route-specific JSON-LD — while keeping the *same* `<script
+   type="module">` bundle reference, so React Router still boots and takes
+   over identically for real visitors. Home's own `dist/index.html` is left
+   as the template (it already has correct home metadata, kept in sync
+   manually — see below) but gets the FAQPage JSON-LD injected into it too.
+   **Cloudflare Pages runs `npm run build` as its build command
+   (`wrangler.jsonc`), so this all happens automatically on every deploy —
+   nothing extra to configure.**
+
+**Single source of truth — `src/data/seo.js`:** exports `staticPages`
+(home/projects/services/about/contact, each with title+description tuned
+to real SERP length limits — titles ~50-65 chars, descriptions ~130-155)
+and `projectSeo(project)` (derives a project's title/description/OG-image
+path from `src/data/projects.js`, so a **new project automatically gets
+correct SEO the moment it's added to `projects.js` — nothing else to
+touch for basic metadata**). Both `SEO.jsx` (live, client-side) and the two
+Node scripts import this same file — Node's native ESM resolver needs
+explicit `.js` extensions on relative imports (unlike Vite), so
+`seo.js`'s `import projects from './projects.js'` has one — don't drop it.
+`SEO.jsx` was rewritten to also manage canonical (auto-derived from
+`useLocation()`), OG/Twitter tags, an optional `noindex` prop (used on
+`NotFound.jsx`), and an optional `jsonLd` prop.
+
+**Important gotcha if you touch `SEO.jsx`'s JSON-LD handling:** the
+prerendered per-route JSON-LD `<script>` tags (FAQPage on home,
+BreadcrumbList on project pages) are given `id="page-json-ld"` —
+deliberately the *same* id `SEO.jsx`'s `setJsonLd()` looks for. This makes
+client-side route changes **replace** the prerendered structured data
+instead of stacking a second, stale copy next to it (verified via
+`--dump-dom`: navigating client-side leaves exactly one `#page-json-ld`
+tag, correctly updated). If you ever regenerate that id or add a new kind
+of per-route JSON-LD, keep the prerender script and `SEO.jsx` using the
+identical id or this breaks silently (duplicate/stale schema in the live
+DOM — invisible to a quick look, only shows up if you inspect after
+clicking around rather than loading a URL fresh).
+
+**Other things done this pass:**
+- **OG images**: `public/images/og-default.jpg` (1200×630, generated with
+  PIL — the hero photo + brand headline text rendered using the actual
+  Satoshi/Manrope fonts, decompressed from woff2 back to ttf with
+  `fontTools` just for this one script, not committed) for
+  home/services/about/contact. Each project gets its own
+  `public/assets/images/projects/<slug>/og.jpg` — a 1200×630 center-crop
+  of its existing `desktop.webp`. JPEG specifically for these (not WebP)
+  — social-preview crawlers have historically had spotty WebP support,
+  unlike the in-page images which are fine as WebP.
+- **Structured data**: `ProfessionalService` in `index.html` (sitewide,
+  unaffected by prerendering) got `sameAs` (LinkedIn/Upwork),
+  `PostalAddress` (Karachi, PK), `@id`s. Added `FAQPage` (home, from the
+  real FAQ content in `src/data/faq.js` — moved out of `Home.jsx` into its
+  own file specifically so the build script could reuse it without
+  duplicating the copy) and `BreadcrumbList` (every project detail page).
+- **Heading/breadcrumb-adjacent**: added a visible "← All Projects" link
+  at the top of `ProjectDetail.jsx` (`.breadcrumb-link` in `extras.css`) —
+  UX breadcrumb, not just the invisible JSON-LD one.
+- **Internal linking**: `Services.jsx` had zero links to `/projects`
+  (real proof of the work) — added one under the hero. `About.jsx`'s first
+  "WordPress and React" mention now links to `/services`. Kept it to a
+  couple of natural, high-value links rather than over-linking.
+- **`robots.txt`**: already correct (allow all, points at the sitemap) —
+  left as-is.
+- Verified everything — description/title lengths checked programmatically
+  against real SERP limits, every generated JSON-LD block validated with
+  `JSON.parse`, checked real rendered output with
+  `chrome.exe --headless=new --dump-dom` (not just that the build didn't
+  error), screenshotted the two visual additions (breadcrumb link, Services
+  internal link) to confirm no layout regression.
+
+**Not done / deliberately out of scope:** no `hreflang` (single-language
+site). No `og:type: article` + published/modified dates on project pages —
+`website` is simpler and we don't reliably know real publish dates, not
+worth the complexity/risk of wrong dates. Didn't touch the `_redirects` /
+`wrangler.jsonc` SPA-fallback duplication (both exist, both say "serve
+index.html with 200 for unmatched paths" — redundant but harmless, already
+working in production, not a SEO issue on its own since `NotFound.jsx` now
+sets `noindex` client-side for genuinely bad URLs).
 
 ### 2026-08-20 (4) — Agentic Browsing (new Lighthouse category, May 2026)
 

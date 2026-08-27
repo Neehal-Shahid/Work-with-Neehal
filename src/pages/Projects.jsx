@@ -4,6 +4,9 @@ import SEO from '../components/SEO';
 import useScrollReveal from '../hooks/useScrollReveal';
 import useTilt from '../hooks/useTilt';
 import projects from '../data/projects';
+import { staticPages } from '../data/seo';
+
+const projectsSeo = staticPages.find((p) => p.key === 'projects');
 
 const FILTERS = [
   { key: 'all', label: 'All' },
@@ -23,8 +26,8 @@ export default function Projects() {
   return (
     <div ref={rootRef}>
       <SEO
-        title="Projects — Work With Neehal"
-        description="Real WordPress projects for agencies, solar, and energy businesses, built by a developer who also ships production React — this site is the proof."
+        title={projectsSeo.title}
+        description={projectsSeo.description}
       />
 
       <main>

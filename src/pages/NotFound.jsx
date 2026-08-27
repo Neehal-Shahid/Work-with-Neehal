@@ -4,7 +4,7 @@ import SEO from '../components/SEO';
 export default function NotFound() {
   return (
     <main>
-      <SEO title="Page Not Found — Work With Neehal" description="This page doesn't exist." />
+      <SEO title="Page Not Found — Work With Neehal" description="This page doesn't exist." noindex />
       <section className="page-hero page-hero--center" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center' }}>
         <div className="container">
           <span className="section-label">404</span>

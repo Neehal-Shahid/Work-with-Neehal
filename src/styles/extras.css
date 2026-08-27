@@ -120,6 +120,18 @@
   transform: translateX(-50%) translateY(0) rotate(-3.5deg);
 }
 
+.breadcrumb-link {
+  display: inline-block;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+  color: var(--accent-primary);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

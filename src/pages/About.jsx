@@ -2,6 +2,9 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import useScrollReveal from '../hooks/useScrollReveal';
+import { staticPages } from '../data/seo';
+
+const aboutSeo = staticPages.find((p) => p.key === 'about');
 
 const SKILLS = [
   { name: 'WordPress', size: 'xl', tip: 'The CMS that powers content-driven sites — and lets you edit it yourself' },
@@ -33,8 +36,8 @@ export default function About() {
   return (
     <div ref={rootRef}>
       <SEO
-        title="About — Work With Neehal"
-        description="How Muhammad Neehal Shahid builds React web apps and WordPress websites — clarity, ownership, reliability, and craft."
+        title={aboutSeo.title}
+        description={aboutSeo.description}
       />
 
       <main>
@@ -53,7 +56,7 @@ export default function About() {
               <h2>Not a bio. A working philosophy.</h2>
             </div>
             <div className="prose-block" data-animate="fade-up">
-              <p>I work in two stacks for a reason: WordPress and React solve different problems. WordPress gives you ownership — roughly 43% of the web runs on it because you can take your site anywhere, forever, without needing me. React gives you power — real interactivity, custom logic, and interfaces WordPress was never built to handle. I don't force every project into one tool. I ask what the site actually needs to do, then build with whichever stack gets you there without unnecessary complexity.</p>
+              <p>I work in <Link to="/services" className="link-underline">two stacks</Link> for a reason: WordPress and React solve different problems. WordPress gives you ownership — roughly 43% of the web runs on it because you can take your site anywhere, forever, without needing me. React gives you power — real interactivity, custom logic, and interfaces WordPress was never built to handle. I don't force every project into one tool. I ask what the site actually needs to do, then build with whichever stack gets you there without unnecessary complexity.</p>
               <p>I approach every project from the outside in. Before I ask about colors, plugins, or component libraries, I ask who your customer is and what they need to believe in the first five seconds. Most developers design inward — from the codebase outward. I design from that first impression back to the homepage.</p>
               <p>What you get is not a beautiful website for its own sake. You get a business asset — something with a job to do and a way to tell if it's doing it. If it doesn't help phones ring, forms fill, or trust stick, it isn't finished.</p>
             </div>

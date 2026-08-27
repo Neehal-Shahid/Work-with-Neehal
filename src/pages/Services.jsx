@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import useScrollReveal from '../hooks/useScrollReveal';
 import { wordpressServices, reactServices } from '../data/services';
+import { staticPages } from '../data/seo';
+
+const servicesSeo = staticPages.find((p) => p.key === 'services');
 
 function ServiceFull({ service, badgeClass }) {
   return (
@@ -33,8 +36,8 @@ export default function Services() {
   return (
     <div ref={rootRef}>
       <SEO
-        title="Services — Work With Neehal"
-        description="React web apps and WordPress business sites, landing pages, WooCommerce, migrations, performance, and maintenance — ten services done properly."
+        title={servicesSeo.title}
+        description={servicesSeo.description}
       />
 
       <main>
@@ -43,6 +46,9 @@ export default function Services() {
             <span className="section-label">Services</span>
             <h1>Exactly what you need.<br />Nothing you don't.</h1>
             <p className="section-sub">Two tracks — WordPress and React. I'll tell you honestly which one your project needs.</p>
+            <p style={{ marginTop: 16 }}>
+              <Link to="/projects" className="link-underline">See these services in real projects <span className="btn-arrow">→</span></Link>
+            </p>
           </div>
         </section>
 
